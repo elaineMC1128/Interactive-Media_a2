@@ -1,0 +1,489 @@
+:root {
+  --dark: #070411;
+  --panel: rgba(20, 16, 24, 0.78);
+  --panel-strong: rgba(12, 10, 16, 0.88);
+  --text: #ffffff;
+  --muted: #cfc8d6;
+  --pink: hsl(337, 100%, 73%);
+  --orange: #f0a84b;
+  --line: rgba(255, 255, 255, 0.18);
+  --radius: 18px;
+}
+
+body {
+  min-height: 100vh;
+  overflow: hidden;
+  font-family: "Courier New", monospace;
+  color: var(--text);
+  background: var(--dark);
+}
+
+/* 整个页面背景。JS 会根据主题切换 background-image */
+.app {
+  min-height: 100vh;
+  position: relative;
+  background-image: url("assets/themes/violet/bg.gif");
+  background-size: cover;
+  background-position: center;
+}
+
+/* 暗色遮罩，让前景 UI 更清楚 */
+.app::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 3, 12, 0.18);
+  pointer-events: none;
+}
+
+/* 像素感扫描线 */
+.app::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 0.035) 1px,
+    transparent 1px
+  );
+  background-size: 100% 4px;
+  mix-blend-mode: overlay;
+}
+
+/* 左上角标题 */
+.site-title {
+  position: fixed;
+  top: 26px;
+  left: 36px;
+  z-index: 20;
+}
+
+.site-title h1 {
+  font-size: 1.05rem;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 0 #000;
+}
+
+/* 右上角全屏按钮 */
+.fullscreen-btn {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 30;
+  width: 38px;
+  height: 38px;
+  color: white;
+  background: rgba(20, 16, 40, 0.55);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* 右上角倒计时 / 时钟 */
+.floating-timer,
+.clock-display {
+  position: fixed;
+  top: 22px;
+  right: 70px;
+  z-index: 30;
+  padding: 8px 12px;
+  background: rgba(20, 16, 40, 0.72);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--pink);
+}
+
+/* =========================
+   主题选择面板
+   ========================= */
+
+.theme-panel {
+  position: fixed;
+  left: 10%;
+  right: 10%;
+  bottom: 112px;
+  z-index: 40;
+
+  height: 210px;
+  padding: 20px 48px;
+
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
+  align-items: center;
+  gap: 18px;
+
+  background: rgba(10, 8, 12, 0.82);
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  backdrop-filter: blur(8px);
+}
+
+.theme-card-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(170px, 1fr));
+  gap: 16px;
+}
+
+.theme-card {
+  height: 150px;
+  position: relative;
+  overflow: hidden;
+
+  border: 2px solid transparent;
+  border-radius: 18px;
+  background-size: cover;
+  background-position: center;
+
+  cursor: pointer;
+}
+
+.theme-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    transparent 20%,
+    rgba(0, 0, 0, 0.72)
+  );
+}
+
+.theme-card.active {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 2px rgba(240, 168, 75, 0.3);
+}
+
+.theme-card h3,
+.theme-card p {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  z-index: 2;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 #000;
+}
+
+.theme-card h3 {
+  bottom: 42px;
+  font-size: 1.35rem;
+  letter-spacing: 2px;
+}
+
+.theme-card p {
+  bottom: 18px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+}
+
+.theme-arrow {
+  width: 40px;
+  height: 60px;
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 3rem;
+  cursor: pointer;
+}
+
+.theme-arrow:hover {
+  color: var(--pink);
+}
+
+/* =========================
+   底部控制栏
+   ========================= */
+
+.control-bar {
+  position: fixed;
+  left: 9%;
+  right: 9%;
+  bottom: 20px;
+  z-index: 35;
+
+  height: 70px;
+  padding: 0 18px;
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  backdrop-filter: blur(8px);
+}
+
+.track-area {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.theme-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  color: #241057;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.track-text h2 {
+  font-size: 1.05rem;
+  line-height: 1.1;
+  text-shadow: 2px 2px 0 #000;
+}
+
+.track-text p {
+  margin-top: 4px;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.main-controls,
+.right-controls {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.right-controls {
+  justify-content: flex-end;
+}
+
+.icon-btn,
+.play-btn {
+  border: none;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1.35rem;
+}
+
+.icon-btn:hover {
+  color: var(--pink);
+}
+
+.play-btn {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--pink);
+  color: #241057;
+}
+
+/* 音量滑杆 */
+.volume-panel {
+  position: absolute;
+  right: 142px;
+  bottom: 82px;
+  height: 120px;
+  padding: 10px;
+  background: var(--panel-strong);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+#volume-slider {
+  height: 100px;
+  writing-mode: vertical-lr;
+  direction: rtl;
+  accent-color: var(--pink);
+}
+
+/* =========================
+   番茄钟面板
+   ========================= */
+
+.timer-panel {
+  position: fixed;
+  right: 12%;
+  bottom: 112px;
+  z-index: 45;
+  width: 280px;
+  padding: 18px;
+  background: rgba(86, 80, 110, 0.95);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.timer-panel h3 {
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.timer-panel label {
+  display: block;
+  margin-top: 12px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+#timer-input {
+  width: 90px;
+  margin-top: 6px;
+  padding: 6px;
+  border: none;
+  border-radius: 4px;
+  text-align: center;
+}
+
+#timer-preview {
+  margin: 12px 0;
+  font-size: 2.5rem;
+  color: var(--pink);
+}
+
+.timer-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.timer-buttons button {
+  padding: 8px 12px;
+  border: none;
+  background: var(--pink);
+  color: #241057;
+  cursor: pointer;
+}
+
+/* =========================
+   Settings 面板
+   ========================= */
+
+.settings-panel {
+  position: fixed;
+  right: 40px;
+  top: 40px;
+  z-index: 60;
+
+  width: 420px;
+  padding: 28px;
+
+  background: rgba(50, 45, 40, 0.96);
+  border-radius: 24px;
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settings-header h3 {
+  font-size: 2rem;
+}
+
+#close-settings-btn {
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 2.2rem;
+  cursor: pointer;
+}
+
+.setting-row {
+  margin-top: 28px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+}
+
+.setting-row h4 {
+  font-size: 1.35rem;
+}
+
+.setting-row p {
+  margin-top: 8px;
+  color: #b7b0aa;
+  line-height: 1.3;
+}
+
+.setting-box {
+  margin-top: 18px;
+  padding: 18px 22px;
+  display: flex;
+  justify-content: space-between;
+  background: rgba(255,255,255,0.08);
+  border-radius: 14px;
+}
+
+.setting-box strong {
+  color: #ffb454;
+}
+
+.toggle-btn {
+  width: 78px;
+  height: 40px;
+  border: none;
+  border-radius: 999px;
+  background: #666;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.toggle-btn span {
+  display: block;
+  width: 32px;
+  height: 32px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.toggle-btn.active {
+  background: #ffb454;
+}
+
+.toggle-btn.active span {
+  transform: translateX(38px);
+}
+
+/* 自动隐藏 UI */
+body.hide-ui .control-bar,
+body.hide-ui .site-title,
+body.hide-ui .fullscreen-btn,
+body.hide-ui .theme-panel {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 通用隐藏 */
+.hidden {
+  display: none;
+}
+
+/* 响应式 */
+@media (max-width: 900px) {
+  .control-bar {
+    left: 16px;
+    right: 16px;
+    grid-template-columns: 1fr auto;
+    height: auto;
+    padding: 14px;
+    gap: 14px;
+  }
+
+  .right-controls {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+
+  .theme-panel {
+    left: 16px;
+    right: 16px;
+    height: auto;
+  }
+
+  .theme-card-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}

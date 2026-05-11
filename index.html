@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>lofi.study</title>
+
+  <link rel="stylesheet" href="reset.css" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="main.js" defer></script>
+</head>
+
+<body>
+  <main class="app" id="app">
+
+    <!-- 左上角标题 -->
+    <header class="site-title">
+      <h1>lofi.study</h1>
+    </header>
+
+    <!-- 右上角全屏按钮 -->
+    <button id="fullscreen-btn" class="fullscreen-btn">⛶</button>
+
+    <!-- 倒计时显示 -->
+    <div id="floating-timer" class="floating-timer hidden">25:00</div>
+
+    <!-- 当前时间显示，由 settings 控制 -->
+    <div id="clock-display" class="clock-display hidden"></div>
+
+    <!-- 主题选择面板：点击左下角圆形按钮出现 -->
+    <section id="theme-panel" class="theme-panel hidden">
+      <button id="theme-prev-btn" class="theme-arrow">‹</button>
+
+      <div class="theme-card-list" id="theme-card-list">
+        <!-- JS 会自动生成四个主题卡片 -->
+      </div>
+
+      <button id="theme-next-btn" class="theme-arrow">›</button>
+    </section>
+
+    <!-- 底部控制栏 -->
+    <section class="control-bar">
+
+      <!-- 左侧：主题按钮 + 当前音乐信息 -->
+      <div class="track-area">
+        <button id="theme-btn" class="theme-circle" aria-label="Choose theme">
+          ♪
+        </button>
+
+        <div class="track-text">
+          <h2 id="track-title">Violet City</h2>
+          <p id="track-artist">Focus Night</p>
+        </div>
+      </div>
+
+      <!-- 中间：上一主题 / 播放暂停 / 下一主题 -->
+      <div class="main-controls">
+        <button id="prev-btn" class="icon-btn">◀</button>
+
+        <button id="play-pause-btn" class="play-btn">
+          <span id="play-pause-icon">▶</span>
+        </button>
+
+        <button id="next-btn" class="icon-btn">▶</button>
+      </div>
+
+      <!-- 右侧：随机 / 音量 / 番茄钟 / 设置 -->
+      <div class="right-controls">
+        <button id="random-btn" class="icon-btn">⇄</button>
+
+        <button id="volume-btn" class="icon-btn">🔊</button>
+
+        <button id="timer-btn" class="icon-btn">⏱</button>
+
+        <button id="settings-btn" class="icon-btn">⋮</button>
+      </div>
+
+      <!-- 音量滑杆 -->
+      <div id="volume-panel" class="volume-panel hidden">
+        <input id="volume-slider" type="range" min="0" max="1" step="0.01" value="0.7" />
+      </div>
+    </section>
+
+    <!-- 番茄钟面板 -->
+    <section id="timer-panel" class="timer-panel hidden">
+      <h3>🍅 Pomodoro Timer</h3>
+
+      <label for="timer-input">Minutes</label>
+      <input id="timer-input" type="number" min="1" max="120" value="25" />
+
+      <p id="timer-preview">25:00</p>
+
+      <div class="timer-buttons">
+        <button id="timer-confirm-btn">start</button>
+        <button id="timer-pause-btn">pause</button>
+        <button id="timer-reset-btn">reset</button>
+      </div>
+    </section>
+
+    <!-- 设置面板 -->
+    <section id="settings-panel" class="settings-panel hidden">
+      <div class="settings-header">
+        <h3>Settings</h3>
+        <button id="close-settings-btn">×</button>
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <h4>Hide Elements</h4>
+          <p>Hide the interface after a period of inactivity.</p>
+        </div>
+
+        <button id="hide-toggle" class="toggle-btn active">
+          <span></span>
+        </button>
+      </div>
+
+      <div class="setting-box">
+        <span>Hide After</span>
+        <strong>30 sec</strong>
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <h4>Show Clock</h4>
+        </div>
+
+        <button id="clock-toggle" class="toggle-btn">
+          <span></span>
+        </button>
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <h4>Keyboard Shortcuts</h4>
+          <p>Use [SPACE] to pause and [M] to mute.</p>
+        </div>
+
+        <button id="shortcut-toggle" class="toggle-btn active">
+          <span></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 真正播放音乐的 audio -->
+    <audio id="audio-player"></audio>
+
+  </main>
+</body>
+</html>
