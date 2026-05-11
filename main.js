@@ -18,9 +18,10 @@ const prevBtn = document.querySelector("#prev-btn");
 const nextBtn = document.querySelector("#next-btn");
 const playPauseBtn = document.querySelector("#play-pause-btn");
 const playPauseIcon = document.querySelector("#play-pause-icon");
-const randomBtn = document.querySelector("#random-btn");
+const randomBtn = document.querySelector("#shuffle-btn");
 
 const volumeBtn = document.querySelector("#volume-btn");
+const volumeIcon = document.querySelector("#volume-icon");
 const volumePanel = document.querySelector("#volume-panel");
 const volumeSlider = document.querySelector("#volume-slider");
 
@@ -42,7 +43,7 @@ const clockToggle = document.querySelector("#clock-toggle");
 const shortcutToggle = document.querySelector("#shortcut-toggle");
 const clockDisplay = document.querySelector("#clock-display");
 
-const fullscreenBtn = document.querySelector("#fullscreen-btn");
+const fullscreenBtn = document.querySelector("#fullscreen");
 
 
 /* =========================
@@ -270,10 +271,10 @@ volumeSlider.addEventListener("input", () => {
   audio.volume = Number(volumeSlider.value);
 
   if (audio.volume === 0) {
-    volumeBtn.textContent = "🔇";
+    volumeIcon.src = "assets/icon/mute.png";
   } else {
     previousVolume = audio.volume;
-    volumeBtn.textContent = "🔊";
+    volumeIcon.src = "assets/icon/audio.png";
   }
 });
 
@@ -286,11 +287,11 @@ function toggleMute() {
     previousVolume = audio.volume;
     audio.volume = 0;
     volumeSlider.value = 0;
-    volumeBtn.textContent = "🔇";
+    volumeIcon.src = "assets/icon/mute.png";
   } else {
     audio.volume = previousVolume;
     volumeSlider.value = previousVolume;
-    volumeBtn.textContent = "🔊";
+    volumeIcon.src = "assets/icon/audio.png";
   }
 }
 
@@ -400,7 +401,9 @@ function resetHideTimer() {
 
   hideTimer = setTimeout(() => {
     document.body.classList.add("hide-ui");
-  }, 30000);
+    const hideSecondsInput = document.querySelector("#hide-seconds-input");
+    const hideDelay = Number(hideSecondsInput.value) * 1000;
+  }, hideDelay);
 }
 
 

@@ -20,7 +20,9 @@
     </header>
 
     <!-- 右上角全屏按钮 -->
-    <button id="fullscreen-btn" class="fullscreen-btn">⛶</button>
+    <button id="fullscreen" class="fullscreen">
+      <img src="assets/icon/full_screen.png" alt="fullscreen-btn" width="25"/>
+    </button>
 
     <!-- 倒计时显示 -->
     <div id="floating-timer" class="floating-timer hidden">25:00</div>
@@ -30,22 +32,26 @@
 
     <!-- 主题选择面板：点击左下角圆形按钮出现 -->
     <section id="theme-panel" class="theme-panel hidden">
-      <button id="theme-prev-btn" class="theme-arrow">‹</button>
+      <button id="theme-prev-btn" class="theme-arrow">
+        <img src="assets/icon/back.png" alt="back-btn" width="25"/>
+      </button>
 
       <div class="theme-card-list" id="theme-card-list">
         <!-- JS 会自动生成四个主题卡片 -->
       </div>
 
-      <button id="theme-next-btn" class="theme-arrow">›</button>
+      <button id="theme-next-btn" class="theme-arrow">
+        <img src="assets/icon/forward.png" alt="forward-btn" width="25"/>
+      </button>
     </section>
 
     <!-- 底部控制栏 -->
-    <section class="control-bar">
+    <section class="controlBar">
 
       <!-- 左侧：主题按钮 + 当前音乐信息 -->
       <div class="track-area">
         <button id="theme-btn" class="theme-circle" aria-label="Choose theme">
-          ♪
+          <img src="assets/icon/music.png" alt="music-btn" width="25"/>
         </button>
 
         <div class="track-text">
@@ -56,24 +62,38 @@
 
       <!-- 中间：上一主题 / 播放暂停 / 下一主题 -->
       <div class="main-controls">
-        <button id="prev-btn" class="icon-btn">◀</button>
-
-        <button id="play-pause-btn" class="play-btn">
-          <span id="play-pause-icon">▶</span>
+        <button id="prev-btn" class="icon-btn">
+          <img src="assets/icon/rewind.png" alt="rewind-btn" width="25"/>
         </button>
 
-        <button id="next-btn" class="icon-btn">▶</button>
+        <button id="play-pause-btn" class="play-btn">
+          <span id="play-pause-icon">
+            <img src="assets/icon/play.png" alt="play-btn" width="25"/>
+          </span>
+        </button>
+
+        <button id="next-btn" class="icon-btn">
+          <img src="assets/icon/next.png" alt="next-btn" width="25"/>
+        </button>
       </div>
 
       <!-- 右侧：随机 / 音量 / 番茄钟 / 设置 -->
       <div class="right-controls">
-        <button id="random-btn" class="icon-btn">⇄</button>
+        <button id="shuffle-btn" class="icon-btn">
+          <img src="assets/icon/shuffle.png" alt="shuffle-btn" width="25"/>
+        </button>
 
-        <button id="volume-btn" class="icon-btn">🔊</button>
+        <button id="volume-btn" class="icon-btn">
+          <img id="volume-icon" src="assets/icon/audio.png" alt="audio-btn" width="25"/>
+        </button>
 
-        <button id="timer-btn" class="icon-btn">⏱</button>
+        <button id="timer-btn" class="icon-btn">
+          <img src="assets/icon/timer.png" alt="timer-btn" width="25"/>
+        </button>
 
-        <button id="settings-btn" class="icon-btn">⋮</button>
+        <button id="settings-btn" class="icon-btn">
+          <img src="assets/icon/settings.png" alt="settings-btn" width="22"/>
+        </button>
       </div>
 
       <!-- 音量滑杆 -->
@@ -84,10 +104,13 @@
 
     <!-- 番茄钟面板 -->
     <section id="timer-panel" class="timer-panel hidden">
-      <h3>🍅 Pomodoro Timer</h3>
+      <h3>
+        <img src="assets/icon/tomato.png" alt="tomato-icon" width="25"/> 
+        <span>Pomodoro Timer</span>
+      </h3>
 
       <label for="timer-input">Minutes</label>
-      <input id="timer-input" type="number" min="1" max="120" value="25" />
+      <input id="timer-input" type="number" min="1" max="1000" value="25" />
 
       <p id="timer-preview">25:00</p>
 
@@ -102,7 +125,9 @@
     <section id="settings-panel" class="settings-panel hidden">
       <div class="settings-header">
         <h3>Settings</h3>
-        <button id="close-settings-btn">×</button>
+        <button id="close-settings-btn">
+          <img src="assets/icon/close.png" alt="close-icon" width="30"/> 
+        </button>
       </div>
 
       <div class="setting-row">
@@ -118,7 +143,10 @@
 
       <div class="setting-box">
         <span>Hide After</span>
-        <strong>30 sec</strong>
+        <div class="hide-input-group">
+          <input id="hide-seconds-input" type="number" min="5" max="300" value="30" />
+        <strong>sec</strong>
+        </div>
       </div>
 
       <div class="setting-row">
