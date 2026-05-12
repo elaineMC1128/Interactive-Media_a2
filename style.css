@@ -96,9 +96,10 @@ body {
 
 /* 左上角当前时间 */
 .clock-display {
-  position: fixed;
-  top: 28px;
+  position: fixed; 
+  top: 50px;
   left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 30;
 
   padding: 0;
@@ -107,8 +108,7 @@ body {
   border-radius: 0;
 
   color: white;
-  font-family: "Courier New", monospace;
-  font-size: 2rem;
+  font-size:3rem;
   letter-spacing: 1px;
   text-shadow: 2px 2px 0 #000;
 }
@@ -267,13 +267,38 @@ body {
   height: 48px;
   border-radius: 50%;
   border: none;
-  background: #666;
+
+  background: rgba(128, 108, 146, 0.85);
+
   color: #241057;
+  font-size: 1.4rem;
+
   cursor: pointer;
+
+  display: grid;
+  place-items: center;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
+/* 鼠标放上去时轻微放大 */
+.theme-circle:hover {
+  transform: scale(1.08);
+
+  box-shadow:
+    0 0 12px rgba(255,255,255,0.25);
+}
+
+/* 点击时轻微缩小 */
+.theme-circle:active {
+  transform: scale(0.96);
+}
+
+/* icon 图片本身 */
 .theme-circle img {
-  margin-left: 10px;
+  pointer-events: none;
 }
 
 .track-text h2 {
@@ -348,58 +373,124 @@ body {
   right: 9%;
   bottom: 100px;
   z-index: 45;
-  width: 280px;
-  padding: 18px;
-  background: rgba(86, 80, 110, 0.95);
-  border-radius: 12px;
+
+  width: 380px;
+  padding: 22px;
+
+  background: rgba(50, 45, 40, 0.96);
+  border-radius: 18px;
   text-align: center;
 }
 
 .timer-panel h3 {
   display: flex;
-  text-align: left;
+  align-items: center;
   gap: 10px;
+
+  text-align: left;
+  font-size: 1.25rem;
 }
 
-.timer-panel span {
-  font-size: 0.95rem;
-  margin-top: 5px;
+.timer-panel h3 span {
+  font-size: 1.25rem;
 }
 
-.timer-panel label {
-  display: block;
-  margin-top: 12px;
-  font-size: 0.8rem;
-  color: var(--muted);
+.timer-inputs {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 24px;
 }
 
-#timer-input {
-  width: 90px;
-  margin-top: 6px;
-  padding: 6px;
-  border: none;
-  border-radius: 4px;
+.timer-inputs label {
+  display: grid;
+  gap: 10px;
+
+  color: white;
+  font-size: 1.15rem;
   text-align: center;
 }
 
+.timer-inputs input {
+  width: 120px;
+  padding: 12px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: white;
+  color: #222;
+
+  text-align: center;
+  font-family: inherit;
+  font-size: 1.4rem;
+}
+
+.timer-inputs input::-webkit-outer-spin-button,
+.timer-inputs input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.timer-inputs input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 #timer-preview {
-  margin: 12px 0;
-  font-size: 2.5rem;
-  color: var(--pink);
+  margin: 24px 0;
+  font-size: 2.8rem;
+  color: white;
 }
 
 .timer-buttons {
   display: flex;
   justify-content: center;
-  gap: 6px;
+  gap: 12px;
 }
 
 .timer-buttons button {
-  padding: 8px 12px;
+  min-width: 92px;
+  padding: 12px 18px;
+
   border: none;
+  border-radius: 0;
+
   background: var(--pink);
   color: #241057;
+
   cursor: pointer;
+  font-family: inherit;
+  font-size: 1.2rem;
+}
+
+.timer-finish-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+
+  display: grid;
+  place-items: center;
+
+  background: rgba(0, 0, 0, 0.72);
+}
+
+.timer-finish-overlay button {
+  padding: 24px 52px;
+
+  border: 2px solid rgba(255,255,255,0.35);
+  border-radius: 12px;
+
+  background: rgba(50, 45, 40, 0.96);
+  color: white;
+
+  font-family: inherit;
+  font-size: 2.4rem;
+  cursor: pointer;
+}
+
+.timer-finish-overlay button:hover {
+  background: var(--pink);
+  color: #241057;
 }
 
 /* =========================

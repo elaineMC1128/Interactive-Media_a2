@@ -28,12 +28,16 @@ const volumeSlider = document.querySelector("#volume-slider");
 
 const timerBtn = document.querySelector("#timer-btn");
 const timerPanel = document.querySelector("#timer-panel");
-const timerInput = document.querySelector("#timer-input");
+const timerHoursInput = document.querySelector("#timer-hours-input");
+const timerMinutesInput = document.querySelector("#timer-minutes-input");
 const timerPreview = document.querySelector("#timer-preview");
 const timerConfirmBtn = document.querySelector("#timer-confirm-btn");
 const timerPauseBtn = document.querySelector("#timer-pause-btn");
-const timerResetBtn = document.querySelector("#timer-reset-btn");
+const timerDeleteBtn = document.querySelector("#timer-delete-btn");
 const floatingTimer = document.querySelector("#floating-timer");
+const timerFinishOverlay = document.querySelector("#timer-finish-overlay");
+const timerDoneBtn = document.querySelector("#timer-done-btn");
+const alarmAudio = document.querySelector("#alarm-audio");
 
 const settingsBtn = document.querySelector("#settings-btn");
 const settingsPanel = document.querySelector("#settings-panel");
@@ -317,24 +321,21 @@ function toggleMute() {
 
 let timerSeconds = 25 * 60;
 let timerInterval = null;
+let volumeBeforeAlarm = audio.volume;
 
 timerBtn.addEventListener("click", () => {
   togglePanel(timerPanel);
 });
 
-timerInput.addEventListener("input", () => {
-  const minutes = Number(timerInput.value);
-  timerPreview.textContent = formatTime(minutes * 60);
-});
+timerHoursInput.addEventListener("input", updateTimerPreviewFromInputs);
+timerMinutesInput.addEventListener("input", updateTimerPreviewFromInputs);
 
 timerConfirmBtn.addEventListener("click", () => {
-  const minutes = Number(timerInput.value);
+  timerSeconds = getTimerSecondsFromInputs();
 
-  if (minutes <= 0) return;
+  if (timerSeconds <= 0) return;
 
-  timerSeconds = minutes * 60;
   floatingTimer.classList.remove("hidden");
-
   updateFloatingTimer();
   startTimer();
   closeSmallPanels();
@@ -342,11 +343,21 @@ timerConfirmBtn.addEventListener("click", () => {
 
 timerPauseBtn.addEventListener("click", pauseTimer);
 
-timerResetBtn.addEventListener("click", () => {
-  pauseTimer();
-  timerSeconds = Number(timerInput.value) * 60;
-  updateFloatingTimer();
-});
+timerDeleteBtn.addEventListener("click", deleteTimer);
+
+timerDoneBtn.addEventListener("click", finishTimerResponse);
+
+function getTimerSecondsFromInputs() {
+  const hours = Number(timerHoursInput.value) || 0;
+  const minutes = Number(timerMinutesInput.value) || 0;
+
+  return hours * 60 * 60 + minutes * 60;
+}
+
+function updateTimerPreviewFromInputs() {
+  const seconds = getTimerSecondsFromInputs();
+  timerPreview.textContent = formatLongTime(seconds);
+}
 
 function startTimer() {
   pauseTimer();
@@ -356,8 +367,10 @@ function startTimer() {
     updateFloatingTimer();
 
     if (timerSeconds <= 0) {
+      timerSeconds = 0;
+      updateFloatingTimer();
       pauseTimer();
-      floatingTimer.textContent = "done";
+      showTimerFinished();
     }
   }, 1000);
 }
@@ -367,9 +380,56 @@ function pauseTimer() {
   timerInterval = null;
 }
 
-function updateFloatingTimer() {
-  floatingTimer.textContent = formatTime(timerSeconds);
+function deleteTimer() {
+  pauseTimer();
+
+  timerSeconds = 0;
+  floatingTimer.classList.add("hidden");
+  timerPreview.textContent = "00:00:00";
+
+  timerHoursInput.value = 0;
+  timerMinutesInput.value = 25;
 }
+
+function updateFloatingTimer() {
+  floatingTimer.textContent = formatLongTime(timerSeconds);
+}
+
+function showTimerFinished() {
+  volumeBeforeAlarm = audio.volume;
+
+  audio.volume = Math.min(audio.volume, 0.18);
+  volumeSlider.value = audio.volume;
+
+  timerFinishOverlay.classList.remove("hidden");
+  floatingTimer.classList.add("hidden");
+
+  alarmAudio.currentTime = 0;
+  alarmAudio.play();
+}
+
+function finishTimerResponse() {
+  timerFinishOverlay.classList.add("hidden");
+
+  audio.volume = volumeBeforeAlarm;
+  volumeSlider.value = volumeBeforeAlarm;
+
+  if (audio.volume === 0) {
+    volumeIcon.src = "assets/icon/no_audio.png";
+  } else {
+    volumeIcon.src = "assets/icon/audio.png";
+  }
+}
+
+function formatLongTime(seconds) {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainSeconds = seconds % 60;
+
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(remainSeconds).padStart(2, "0")}`;
+}
+
+updateTimerPreviewFromInputs();
 
 
 /* =========================

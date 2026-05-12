@@ -103,21 +103,36 @@
     <!-- 番茄钟面板 -->
     <section id="timer-panel" class="timer-panel hidden">
       <h3>
-        <img src="assets/icon/tomato.png" alt="tomato-icon" width="25"/> 
+        <img src="assets/icon/tomato.png" alt="tomato-icon" width="25" />
         <span>Pomodoro Timer</span>
       </h3>
 
-      <label for="timer-input">Minutes</label>
-      <input id="timer-input" type="number" min="1" max="1000" value="25" />
+      <div class="timer-inputs">
+        <label>
+          Hours
+          <input id="timer-hours-input" type="number" min="0" max="23" value="0" />
+        </label>
 
-      <p id="timer-preview">25:00</p>
+        <label>
+          Minutes
+          <input id="timer-minutes-input" type="number" min="0" max="59" value="25" />
+        </label>
+      </div>
+
+      <p id="timer-preview">00:25:00</p>
 
       <div class="timer-buttons">
         <button id="timer-confirm-btn">start</button>
         <button id="timer-pause-btn">pause</button>
-        <button id="timer-reset-btn">reset</button>
+        <button id="timer-delete-btn">delete</button>
       </div>
     </section>
+
+    <div id="timer-finish-overlay" class="timer-finish-overlay hidden">
+      <button id="timer-done-btn">Done</button>
+    </div>
+
+    <audio id="alarm-audio" src="assets/alarm.mp3"></audio>
 
     <!-- 设置面板 -->
     <section id="settings-panel" class="settings-panel hidden">
