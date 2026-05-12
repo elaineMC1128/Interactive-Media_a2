@@ -22,7 +22,7 @@ body {
 .app {
   min-height: 100vh;
   position: relative;
-  background-image: url("assets/themes/violet/bg.gif");
+  background-image: url("assets/theme/focus/bg.gif");
   background-size: cover;
   background-position: center;
 }
@@ -79,18 +79,38 @@ body {
   cursor: pointer;
 }
 
-/* 右上角倒计时 / 时钟 */
-.floating-timer,
-.clock-display {
+/* 右上角番茄钟倒计时 */
+.floating-timer {
   position: fixed;
   top: 22px;
   right: 70px;
   z-index: 30;
+
   padding: 8px 12px;
   background: rgba(20, 16, 40, 0.72);
   border: 1px solid var(--line);
   border-radius: 10px;
+
   color: var(--pink);
+}
+
+/* 左上角当前时间 */
+.clock-display {
+  position: fixed;
+  top: 28px;
+  left: 50%;
+  z-index: 30;
+
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+
+  color: white;
+  font-family: "Courier New", monospace;
+  font-size: 2rem;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 0 #000;
 }
 
 /* =========================
@@ -188,6 +208,28 @@ body {
 
 .theme-arrow:hover {
   color: var(--pink);
+}
+
+.icon-btn,
+.play-btn,
+.fullscreen,
+.theme-arrow,
+#close-settings-btn {
+  display: grid;
+  place-items: center;
+}
+
+.icon-btn img,
+.play-btn img,
+.fullscreen img,
+.theme-arrow img,
+#close-settings-btn img {
+  display: block;
+  pointer-events: none;
+}
+
+.theme-card {
+  font-family: inherit;
 }
 
 /* =========================

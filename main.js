@@ -6,6 +6,7 @@ const app = document.querySelector("#app");
 const audio = document.querySelector("#audio-player");
 
 const themeBtn = document.querySelector("#theme-btn");
+const themeIcon = document.querySelector("#theme-icon");
 const themePanel = document.querySelector("#theme-panel");
 const themeCardList = document.querySelector("#theme-card-list");
 const themePrevBtn = document.querySelector("#theme-prev-btn");
@@ -17,7 +18,7 @@ const trackArtist = document.querySelector("#track-artist");
 const prevBtn = document.querySelector("#prev-btn");
 const nextBtn = document.querySelector("#next-btn");
 const playPauseBtn = document.querySelector("#play-pause-btn");
-const playPauseIcon = document.querySelector("#play-pause-icon");
+const playPauseImg = document.querySelector("#play-pause-img");
 const randomBtn = document.querySelector("#shuffle-btn");
 
 const volumeBtn = document.querySelector("#volume-btn");
@@ -39,6 +40,8 @@ const settingsPanel = document.querySelector("#settings-panel");
 const closeSettingsBtn = document.querySelector("#close-settings-btn");
 
 const hideToggle = document.querySelector("#hide-toggle");
+const hideSecondsInput = document.querySelector("#hide-seconds-input");
+
 const clockToggle = document.querySelector("#clock-toggle");
 const shortcutToggle = document.querySelector("#shortcut-toggle");
 const clockDisplay = document.querySelector("#clock-display");
@@ -48,42 +51,46 @@ const fullscreenBtn = document.querySelector("#fullscreen");
 
 /* =========================
    2. 主题资料
-   一个主题 = 一个背景 + 一首音乐
-   你后面只需要替换 bg 和 music 的路径
+   现在每个主题文件夹里是：
+   bg.gif + audio.mp3
    ========================= */
 
 const themes = [
   {
-    id: "violet",
-    title: "Violet City",
-    subtitle: "Night Focus",
+    id: "focus",
+    title: "Focus",
+    subtitle: "Focus Study",
     artist: "lofi.study",
-    bg: "assets/themes/violet/bg.gif",
-    music: "assets/themes/violet/1.mp3",
+    bg: "assets/theme/focus/bg.gif",
+    music: "assets/theme/focus/audio.mp3",
+    icon: "assets/theme/focus/icon.png",
   },
   {
-    id: "train",
-    title: "Train Journey",
-    subtitle: "City Study",
+    id: "chill",
+    title: "Chill",
+    subtitle: "Soft Break",
     artist: "lofi.study",
-    bg: "assets/themes/train/bg.gif",
-    music: "assets/themes/train/1.mp3",
+    bg: "assets/theme/chill/bg.gif",
+    music: "assets/theme/chill/audio.mp3",
+    icon: "assets/theme/chill/icon.png",
   },
   {
-    id: "country",
-    title: "Country Ride",
-    subtitle: "Calm Reading",
+    id: "relax",
+    title: "Relax",
+    subtitle: "Relaxing Mood",
     artist: "lofi.study",
-    bg: "assets/themes/country/bg.gif",
-    music: "assets/themes/country/1.mp3",
+    bg: "assets/theme/relax/bg.gif",
+    music: "assets/theme/relax/audio.mp3",
+    icon: "assets/theme/relax/icon.png",
   },
   {
-    id: "rain",
-    title: "Rain Window",
-    subtitle: "Relax Mode",
+    id: "jazzy",
+    title: "Jazzy",
+    subtitle: "Chill Night",
     artist: "lofi.study",
-    bg: "assets/themes/rain/bg.gif",
-    music: "assets/themes/rain/1.mp3",
+    bg: "assets/theme/jazzy/bg.gif",
+    music: "assets/theme/jazzy/audio.mp3",
+    icon: "assets/theme/jazzy/icon.png",
   },
 ];
 
@@ -107,8 +114,7 @@ loadTheme(currentThemeIndex);
 
 
 /* =========================
-   5. 生成主题卡片
-   点击卡片后：同时切换背景和音乐
+   5. 自动生成主题卡片
    ========================= */
 
 function renderThemeCards() {
@@ -132,7 +138,7 @@ function renderThemeCards() {
       closeSmallPanels();
 
       audio.play();
-      playPauseIcon.textContent = "Ⅱ";
+      setPauseIcon();
     });
 
     themeCardList.appendChild(card);
@@ -142,8 +148,7 @@ function renderThemeCards() {
 
 /* =========================
    6. 加载主题
-   这里是这版设计最核心的部分：
-   主题切换时，同时换背景、音乐、标题和作者
+   一个主题 = 背景 + 音乐 + 标题
    ========================= */
 
 function loadTheme(index) {
@@ -154,6 +159,9 @@ function loadTheme(index) {
 
   trackTitle.textContent = theme.title;
   trackArtist.textContent = theme.subtitle;
+
+  themeIcon.src = theme.icon;
+  themeIcon.alt = `${theme.title} icon`;
 
   updateActiveThemeCard();
 }
@@ -168,8 +176,7 @@ function updateActiveThemeCard() {
 
 
 /* =========================
-   7. 主题选择面板
-   点击左下角圆形按钮打开
+   7. 主题面板
    ========================= */
 
 themeBtn.addEventListener("click", () => {
@@ -177,25 +184,17 @@ themeBtn.addEventListener("click", () => {
 });
 
 themePrevBtn.addEventListener("click", () => {
-  currentThemeIndex =
-    (currentThemeIndex - 1 + themes.length) % themes.length;
-
-  loadTheme(currentThemeIndex);
-  audio.play();
-  playPauseIcon.textContent = "Ⅱ";
+  playPreviousTheme();
 });
 
 themeNextBtn.addEventListener("click", () => {
-  currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-
-  loadTheme(currentThemeIndex);
-  audio.play();
-  playPauseIcon.textContent = "Ⅱ";
+  playNextTheme();
 });
 
 
 /* =========================
    8. 播放 / 暂停
+   现在是图片 icon，所以改 src，不再用 textContent
    ========================= */
 
 playPauseBtn.addEventListener("click", togglePlayPause);
@@ -203,40 +202,51 @@ playPauseBtn.addEventListener("click", togglePlayPause);
 function togglePlayPause() {
   if (audio.paused) {
     audio.play();
-    playPauseIcon.textContent = "Ⅱ";
+    setPauseIcon();
   } else {
     audio.pause();
-    playPauseIcon.textContent = "▶";
+    setPlayIcon();
   }
+}
+
+function setPlayIcon() {
+  playPauseImg.src = "assets/icon/play.png";
+  playPauseImg.alt = "play-btn";
+}
+
+function setPauseIcon() {
+  playPauseImg.src = "assets/icon/pause.png";
+  playPauseImg.alt = "pause-btn";
 }
 
 
 /* =========================
    9. 上一个 / 下一个主题
-   这里不再是单纯换歌，而是换整个主题
    ========================= */
 
-nextBtn.addEventListener("click", () => {
+nextBtn.addEventListener("click", playNextTheme);
+prevBtn.addEventListener("click", playPreviousTheme);
+
+function playNextTheme() {
   currentThemeIndex = (currentThemeIndex + 1) % themes.length;
 
   loadTheme(currentThemeIndex);
   audio.play();
-  playPauseIcon.textContent = "Ⅱ";
-});
+  setPauseIcon();
+}
 
-prevBtn.addEventListener("click", () => {
+function playPreviousTheme() {
   currentThemeIndex =
     (currentThemeIndex - 1 + themes.length) % themes.length;
 
   loadTheme(currentThemeIndex);
   audio.play();
-  playPauseIcon.textContent = "Ⅱ";
-});
+  setPauseIcon();
+}
 
 
 /* =========================
    10. 随机主题
-   在四个主题里面随机切换
    ========================= */
 
 randomBtn.addEventListener("click", () => {
@@ -249,18 +259,17 @@ randomBtn.addEventListener("click", () => {
   }
 
   currentThemeIndex = randomIndex;
-
   loadTheme(currentThemeIndex);
+
   audio.play();
-  playPauseIcon.textContent = "Ⅱ";
+  setPauseIcon();
 });
 
 
 /* =========================
    11. 音量功能
-   单击音量键打开音量条
-   音量为 0 时，icon 自动变成静音
-   双击音量键可以快速静音 / 恢复
+   audio.png = 有声音
+   no_audio.png = 静音
    ========================= */
 
 volumeBtn.addEventListener("click", () => {
@@ -271,10 +280,12 @@ volumeSlider.addEventListener("input", () => {
   audio.volume = Number(volumeSlider.value);
 
   if (audio.volume === 0) {
-    volumeIcon.src = "assets/icon/mute.png";
+    volumeIcon.src = "assets/icon/no_audio.png";
+    volumeIcon.alt = "mute-btn";
   } else {
     previousVolume = audio.volume;
     volumeIcon.src = "assets/icon/audio.png";
+    volumeIcon.alt = "audio-btn";
   }
 });
 
@@ -287,18 +298,21 @@ function toggleMute() {
     previousVolume = audio.volume;
     audio.volume = 0;
     volumeSlider.value = 0;
-    volumeIcon.src = "assets/icon/mute.png";
+
+    volumeIcon.src = "assets/icon/no_audio.png";
+    volumeIcon.alt = "mute-btn";
   } else {
     audio.volume = previousVolume;
     volumeSlider.value = previousVolume;
+
     volumeIcon.src = "assets/icon/audio.png";
+    volumeIcon.alt = "audio-btn";
   }
 }
 
 
 /* =========================
    12. 番茄钟功能
-   点击 start 后，倒计时显示在右上角
    ========================= */
 
 let timerSeconds = 25 * 60;
@@ -359,7 +373,7 @@ function updateFloatingTimer() {
 
 
 /* =========================
-   13. Settings 设置面板
+   13. Settings 面板
    ========================= */
 
 settingsBtn.addEventListener("click", () => {
@@ -374,6 +388,7 @@ closeSettingsBtn.addEventListener("click", () => {
 
 /* =========================
    14. Settings - 自动隐藏界面
+   修复点：hideDelay 必须在 setTimeout 之前算出来
    ========================= */
 
 let hideElementsEnabled = true;
@@ -399,10 +414,14 @@ function resetHideTimer() {
 
   clearTimeout(hideTimer);
 
+  let hideDelay = Number(hideSecondsInput.value) * 1000;
+
+  if (!hideDelay || hideDelay < 1000) {
+    hideDelay = 30000;
+  }
+
   hideTimer = setTimeout(() => {
     document.body.classList.add("hide-ui");
-    const hideSecondsInput = document.querySelector("#hide-seconds-input");
-    const hideDelay = Number(hideSecondsInput.value) * 1000;
   }, hideDelay);
 }
 
@@ -420,6 +439,7 @@ clockToggle.addEventListener("click", () => {
 });
 
 setInterval(updateClock, 1000);
+updateClock();
 
 function updateClock() {
   const now = new Date();
