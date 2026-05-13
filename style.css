@@ -1,10 +1,17 @@
+/* 
+I used :root variables to store the main colors and reusable design values for the website, such as background colors and text colors.
+
+This approach makes the stylesheet easier to maintain because changing a value in one place automatically updates it across the whole interface. It also helps keep the visual style consistent between different components such as the control bar, settings panel, and theme cards.
+
+I first learned about CSS custom properties in another web design course and then used MDN documentation as additional support.
+*/
 :root {
   --dark: #070411;
-  --panel: rgba(20, 16, 24, 0.78);
-  --panel-strong: rgba(12, 10, 16, 0.88);
+  --panel: #141018c7;
+  --panel-strong: #0c0a10e0;
   --text: #ffffff;
   --muted: #cfc8d6;
-  --pink: hsl(337, 100%, 73%);
+  --purple: #b15ab6;
   --orange: #f0a84b;
   --line: rgba(255, 255, 255, 0.18);
   --radius: 18px;
@@ -18,103 +25,66 @@ body {
   background: var(--dark);
 }
 
-/* 整个页面背景。JS 会根据主题切换 background-image */
+/* The background image is applied to the .app container instead of the body because the application needs to dynamically switch between different animated themes using JavaScript. */
 .app {
   min-height: 100vh;
   position: relative;
-  background-image: url("assets/theme/focus/bg.gif");
+  background-image: url("assets/theme/chill/bg.gif");
   background-size: cover;
   background-position: center;
 }
 
-/* 暗色遮罩，让前景 UI 更清楚 */
+/* I used a semi-transparent overlay with ::before to darken the background slightly. This improves readability and visual hierarchy by increasing the contrast between the animated background and the interface elements. */
 .app::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: rgba(5, 3, 12, 0.18);
+  background: #05030c2e;
   pointer-events: none;
 }
 
-/* 像素感扫描线 */
-.app::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image: linear-gradient(
-    rgba(255, 255, 255, 0.035) 1px,
-    transparent 1px
-  );
-  background-size: 100% 4px;
-  mix-blend-mode: overlay;
-}
 
-/* 左上角标题 */
+/* Title in the top-left corner */
 .site-title {
   position: fixed;
   top: 26px;
   left: 36px;
-  z-index: 20;
-}
-
-.site-title h1 {
   font-size: 1.05rem;
   letter-spacing: 1px;
-  text-shadow: 2px 2px 0 #000;
 }
 
-/* 右上角全屏按钮 */
+/* Current time display in the top-center of the screen */
+.clock-display {
+  position: fixed; 
+  top: 50px;
+  left: 50%;
+  /* 
+  I want the clock to be centered horizontally, but it seems like the left side of the clock is at the center, so I asked ChatGPT to help me with the positioning. 
+  And it told me to use transform: translate(-50%) together with left: 50% to perfectly center the clock horizontally
+  */
+  transform: translate(-50%);
+  z-index: 30;
+  color: var(--text);
+  font-size:3rem;
+  letter-spacing: 1px;
+}
+
+/* Fullscreen button in the top-right corner */
 .fullscreen {
   position: fixed;
-  top: 18px;
-  right: 18px;
-  z-index: 30;
+  top: 20px;
+  right: 20px;
   width: 38px;
   height: 38px;
-  color: white;
-  background: rgba(20, 16, 40, 0.55);
+  background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 10px;
   cursor: pointer;
 }
 
-/* 右上角番茄钟倒计时 */
-.floating-timer {
-  position: fixed;
-  top: 22px;
-  right: 70px;
-  z-index: 30;
-
-  padding: 8px 12px;
-  background: rgba(20, 16, 40, 0.72);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-
-  color: var(--pink);
-}
-
-/* 左上角当前时间 */
-.clock-display {
-  position: fixed; 
-  top: 50px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 30;
-
-  padding: 0;
-  background: none;
-  border: none;
-  border-radius: 0;
-
-  color: white;
-  font-size:3rem;
-  letter-spacing: 1px;
-  text-shadow: 2px 2px 0 #000;
-}
 
 /* =========================
-   主题选择面板
+   主题选择面板 Theme Selection Panel
    ========================= */
 
 .theme-panel {
@@ -123,7 +93,6 @@ body {
   right: 10%;
   bottom: 112px;
   z-index: 40;
-
   height: 210px;
   padding: 20px 48px;
 
@@ -132,15 +101,21 @@ body {
   align-items: center;
   gap: 18px;
 
-  background: rgba(10, 8, 12, 0.82);
+  background: var(--panel-strong);
   border: 1px solid var(--line);
   border-radius: 26px;
-  backdrop-filter: blur(8px);
+  /* I asked Gemini how to create a glass blur effect */
+  backdrop-filter: blur(8px); 
 }
 
 .theme-card-list {
   display: grid;
-  grid-template-columns: repeat(4, minmax(170px, 1fr));
+  grid-template-columns: repeat(4, minmax(170px, 1fr)); 
+  /* 
+  4 columns
+  Minimum 170px
+  Distribute evenly across remaining space
+  */
   gap: 16px;
 }
 
@@ -207,7 +182,7 @@ body {
 }
 
 .theme-arrow:hover {
-  color: var(--pink);
+  color: var(--purple);
 }
 
 .icon-btn,
@@ -233,7 +208,7 @@ body {
 }
 
 /* =========================
-   底部控制栏
+   底部控制栏 Bottom Control Bar
    ========================= */
 
 .controlBar {
@@ -242,14 +217,11 @@ body {
   right: 9%;
   bottom: 20px;
   z-index: 35;
-
   height: 70px;
   padding: 0 18px;
-
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -262,43 +234,30 @@ body {
   gap: 14px;
 }
 
-.theme-circle {
+/* The theme button is designed as a circular floating icon because it acts as the main entry point for changing themes. */
+.theme-btn {
   width: 48px;
   height: 48px;
   border-radius: 50%;
   border: none;
-
-  background: rgba(128, 108, 146, 0.85);
-
-  color: #241057;
-  font-size: 1.4rem;
-
+  background: #806c92d9;
   cursor: pointer;
-
   display: grid;
   place-items: center;
-
   transition:
     transform 0.18s ease,
     box-shadow 0.18s ease;
 }
 
-/* 鼠标放上去时轻微放大 */
-.theme-circle:hover {
+/* Zoom in slightly when the mouse hovers over it */
+.theme-btn:hover {
   transform: scale(1.08);
-
-  box-shadow:
-    0 0 12px rgba(255,255,255,0.25);
+  box-shadow: 0 0 12px rgba(255,255,255,0.25);
 }
 
-/* 点击时轻微缩小 */
-.theme-circle:active {
+/* Zoom out slightly when clicked */
+.theme-btn:active {
   transform: scale(0.96);
-}
-
-/* icon 图片本身 */
-.theme-circle img {
-  pointer-events: none;
 }
 
 .track-text h2 {
@@ -331,24 +290,20 @@ body {
   cursor: pointer;
 }
 
-.icon-btn:hover {
-  color: var(--pink);
-}
-
 .play-btn {
   width: 44px;
   height: 44px;
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: var(--pink);
+  background: var(--purple);
   color: #241057;
 }
 
-/* 音量滑杆 */
+/* Volume slider */
 .volume-panel {
   position: absolute;
-  right: 116px;
+  right: 62px;
   bottom: 80px;
   height: 120px;
   padding: 10px;
@@ -357,144 +312,17 @@ body {
   border-radius: 12px;
 }
 
+/* I chose a vertical slider because it uses less horizontal space and feels more similar to audio controls used in music software and streaming applications. */
 #volume-slider {
   height: 100px;
   writing-mode: vertical-lr;
   direction: rtl;
-  accent-color: var(--pink);
+  accent-color: var(--purple);
 }
+
 
 /* =========================
-   番茄钟面板
-   ========================= */
-
-.timer-panel {
-  position: fixed;
-  right: 9%;
-  bottom: 100px;
-  z-index: 45;
-
-  width: 380px;
-  padding: 22px;
-
-  background: rgba(50, 45, 40, 0.96);
-  border-radius: 18px;
-  text-align: center;
-}
-
-.timer-panel h3 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  text-align: left;
-  font-size: 1.25rem;
-}
-
-.timer-panel h3 span {
-  font-size: 1.25rem;
-}
-
-.timer-inputs {
-  display: flex;
-  justify-content: center;
-  gap: 18px;
-  margin-top: 24px;
-}
-
-.timer-inputs label {
-  display: grid;
-  gap: 10px;
-
-  color: white;
-  font-size: 1.15rem;
-  text-align: center;
-}
-
-.timer-inputs input {
-  width: 120px;
-  padding: 12px;
-
-  border: none;
-  border-radius: 8px;
-
-  background: white;
-  color: #222;
-
-  text-align: center;
-  font-family: inherit;
-  font-size: 1.4rem;
-}
-
-.timer-inputs input::-webkit-outer-spin-button,
-.timer-inputs input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.timer-inputs input[type="number"] {
-  -moz-appearance: textfield;
-}
-
-#timer-preview {
-  margin: 24px 0;
-  font-size: 2.8rem;
-  color: white;
-}
-
-.timer-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-}
-
-.timer-buttons button {
-  min-width: 92px;
-  padding: 12px 18px;
-
-  border: none;
-  border-radius: 0;
-
-  background: var(--pink);
-  color: #241057;
-
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 1.2rem;
-}
-
-.timer-finish-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-
-  display: grid;
-  place-items: center;
-
-  background: rgba(0, 0, 0, 0.72);
-}
-
-.timer-finish-overlay button {
-  padding: 24px 52px;
-
-  border: 2px solid rgba(255,255,255,0.35);
-  border-radius: 12px;
-
-  background: rgba(50, 45, 40, 0.96);
-  color: white;
-
-  font-family: inherit;
-  font-size: 2.4rem;
-  cursor: pointer;
-}
-
-.timer-finish-overlay button:hover {
-  background: var(--pink);
-  color: #241057;
-}
-
-/* =========================
-   Settings 面板
+   Settings Panel
    ========================= */
 
 .settings-panel {
@@ -502,11 +330,9 @@ body {
   right: 9%;
   bottom: 100px;
   z-index: 60;
-
   width: 320px;
   padding: 20px;
-
-  background: rgba(50, 45, 40, 0.96);
+  background: var(--panel-strong);
   border-radius: 18px;
 }
 
@@ -531,7 +357,7 @@ body {
 #close-settings-btn {
   border: none;
   background: transparent;
-  cursor: pointer; /* change the mouse cursor */
+  cursor: pointer;
 }
 
 .setting-row {
@@ -548,7 +374,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(255,255,255,0.08);
+  background: #ffffff14;
   border-radius: 14px;
 }
 
@@ -559,13 +385,10 @@ body {
 .hide-input-group input {
   width: 70px;
   padding: 6px 8px;
-
   border: none;
   border-radius: 8px;
-
-  background: rgba(255,255,255,0.08);
+  background: #ffffff14;
   color: white;
-
   text-align: center;
   font-family: inherit;
   font-size: 1rem;
@@ -586,6 +409,10 @@ body {
   margin: 0;
 }
 
+/* 
+This custom toggle switch was created for the settings panel to provide a cleaner and more modern interaction style compared to default HTML checkboxes.
+I asked ChatGPT to help me create a custom toggle switch using HTML and CSS, and it provided the structure and styling for the .toggle-btn class. The toggle switch consists of a rounded track and a circular thumb that slides left and right to indicate on/off states. The active state changes the background color of the track and moves the thumb to the opposite side.
+*/
 .toggle-btn {
   width: 70px;
   min-width: 70px;

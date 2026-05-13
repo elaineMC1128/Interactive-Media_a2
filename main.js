@@ -1,5 +1,5 @@
 /* =========================
-   1. 获取页面元素
+   Get page elements
    ========================= */
 
 const app = document.querySelector("#app");
@@ -26,19 +26,6 @@ const volumeIcon = document.querySelector("#volume-icon");
 const volumePanel = document.querySelector("#volume-panel");
 const volumeSlider = document.querySelector("#volume-slider");
 
-const timerBtn = document.querySelector("#timer-btn");
-const timerPanel = document.querySelector("#timer-panel");
-const timerHoursInput = document.querySelector("#timer-hours-input");
-const timerMinutesInput = document.querySelector("#timer-minutes-input");
-const timerPreview = document.querySelector("#timer-preview");
-const timerConfirmBtn = document.querySelector("#timer-confirm-btn");
-const timerPauseBtn = document.querySelector("#timer-pause-btn");
-const timerDeleteBtn = document.querySelector("#timer-delete-btn");
-const floatingTimer = document.querySelector("#floating-timer");
-const timerFinishOverlay = document.querySelector("#timer-finish-overlay");
-const timerDoneBtn = document.querySelector("#timer-done-btn");
-const alarmAudio = document.querySelector("#alarm-audio");
-
 const settingsBtn = document.querySelector("#settings-btn");
 const settingsPanel = document.querySelector("#settings-panel");
 const closeSettingsBtn = document.querySelector("#close-settings-btn");
@@ -54,21 +41,12 @@ const fullscreenBtn = document.querySelector("#fullscreen");
 
 
 /* =========================
-   2. 主题资料
-   现在每个主题文件夹里是：
-   bg.gif + audio.mp3
+   All theme data is stored in the "themes" array. 
+   Each theme has an id, title, subtitle, artist, background image, music file, and icon. 
+   This structure allows for easy management and expansion of themes in the future.
    ========================= */
 
 const themes = [
-  {
-    id: "focus",
-    title: "Focus",
-    subtitle: "Focus Study",
-    artist: "lofi.study",
-    bg: "assets/theme/focus/bg.gif",
-    music: "assets/theme/focus/audio.mp3",
-    icon: "assets/theme/focus/icon.png",
-  },
   {
     id: "chill",
     title: "Chill",
@@ -77,6 +55,15 @@ const themes = [
     bg: "assets/theme/chill/bg.gif",
     music: "assets/theme/chill/audio.mp3",
     icon: "assets/theme/chill/icon.png",
+  },
+  {
+    id: "focus",
+    title: "Focus",
+    subtitle: "Focus Study",
+    artist: "lofi.study",
+    bg: "assets/theme/focus/bg.gif",
+    music: "assets/theme/focus/audio.mp3",
+    icon: "assets/theme/focus/icon.png",
   },
   {
     id: "relax",
@@ -316,123 +303,6 @@ function toggleMute() {
 
 
 /* =========================
-   12. 番茄钟功能
-   ========================= */
-
-let timerSeconds = 25 * 60;
-let timerInterval = null;
-let volumeBeforeAlarm = audio.volume;
-
-timerBtn.addEventListener("click", () => {
-  togglePanel(timerPanel);
-});
-
-timerHoursInput.addEventListener("input", updateTimerPreviewFromInputs);
-timerMinutesInput.addEventListener("input", updateTimerPreviewFromInputs);
-
-timerConfirmBtn.addEventListener("click", () => {
-  timerSeconds = getTimerSecondsFromInputs();
-
-  if (timerSeconds <= 0) return;
-
-  floatingTimer.classList.remove("hidden");
-  updateFloatingTimer();
-  startTimer();
-  closeSmallPanels();
-});
-
-timerPauseBtn.addEventListener("click", pauseTimer);
-
-timerDeleteBtn.addEventListener("click", deleteTimer);
-
-timerDoneBtn.addEventListener("click", finishTimerResponse);
-
-function getTimerSecondsFromInputs() {
-  const hours = Number(timerHoursInput.value) || 0;
-  const minutes = Number(timerMinutesInput.value) || 0;
-
-  return hours * 60 * 60 + minutes * 60;
-}
-
-function updateTimerPreviewFromInputs() {
-  const seconds = getTimerSecondsFromInputs();
-  timerPreview.textContent = formatLongTime(seconds);
-}
-
-function startTimer() {
-  pauseTimer();
-
-  timerInterval = setInterval(() => {
-    timerSeconds--;
-    updateFloatingTimer();
-
-    if (timerSeconds <= 0) {
-      timerSeconds = 0;
-      updateFloatingTimer();
-      pauseTimer();
-      showTimerFinished();
-    }
-  }, 1000);
-}
-
-function pauseTimer() {
-  clearInterval(timerInterval);
-  timerInterval = null;
-}
-
-function deleteTimer() {
-  pauseTimer();
-
-  timerSeconds = 0;
-  floatingTimer.classList.add("hidden");
-  timerPreview.textContent = "00:00:00";
-
-  timerHoursInput.value = 0;
-  timerMinutesInput.value = 25;
-}
-
-function updateFloatingTimer() {
-  floatingTimer.textContent = formatLongTime(timerSeconds);
-}
-
-function showTimerFinished() {
-  volumeBeforeAlarm = audio.volume;
-
-  audio.volume = Math.min(audio.volume, 0.18);
-  volumeSlider.value = audio.volume;
-
-  timerFinishOverlay.classList.remove("hidden");
-  floatingTimer.classList.add("hidden");
-
-  alarmAudio.currentTime = 0;
-  alarmAudio.play();
-}
-
-function finishTimerResponse() {
-  timerFinishOverlay.classList.add("hidden");
-
-  audio.volume = volumeBeforeAlarm;
-  volumeSlider.value = volumeBeforeAlarm;
-
-  if (audio.volume === 0) {
-    volumeIcon.src = "assets/icon/no_audio.png";
-  } else {
-    volumeIcon.src = "assets/icon/audio.png";
-  }
-}
-
-function formatLongTime(seconds) {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remainSeconds = seconds % 60;
-
-  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(remainSeconds).padStart(2, "0")}`;
-}
-
-updateTimerPreviewFromInputs();
-
-
-/* =========================
    13. Settings 面板
    ========================= */
 
@@ -567,7 +437,6 @@ function togglePanel(panel) {
 function closeSmallPanels() {
   themePanel.classList.add("hidden");
   volumePanel.classList.add("hidden");
-  timerPanel.classList.add("hidden");
 }
 
 function formatTime(seconds) {
