@@ -17,6 +17,8 @@ I chose the “music for relaxation/study” context because I wanted to create 
 Instead of using a complex interface with many controls, I decided to keep the layout minimal and centered around mood selection. Each theme combines a different background animation, icon, and music track to create a more cohesive emotional atmosphere. Most interactions are intentionally subtle and low-distraction because the website is designed to stay open in the background while users study. I also used pixel-art inspired visuals and retro typography to match the nostalgic aesthetic commonly associated with lo-fi music culture.
 Some layout and interaction problems were solved with the help of ChatGPT and Gemini, especially fullscreen functionality, panel toggling logic, and dynamic theme switching.
 -->
+
+<!-- All icons are from <a href="https://icons8.com/">Icon8</a> -->
 <body>
   <!--  -->
   <main class="app" id="app">
@@ -25,24 +27,24 @@ Some layout and interaction problems were solved with the help of ChatGPT and Ge
     Assets order: title - clock - fullscreen - theme panel - theme information area - control area - shuffle/volume/settings - volume panel - settings panel
     -->
 
-    <!-- 左上角标题 -->
+    <!-- Title in the top-left corner -->
     <header class="site-title">
       <h1>lofi.study</h1>
     </header>
 
-    <!-- 当前时间显示，由 settings 控制 -->
+    <!-- Current time display, controlled by settings -->
     <!-- 
     Due to my purpose of creating a immersive / low distraction interface, so I wanted to try my best to minimize distractions.
     So I asked ChatGPT how to make the hidden panels, and it gave me a solution using the "hidden" class to control the visibility of the panel display. The hidden panel will only appear when the user clicks the corresponding button.
     -->
     <div id="clock-display" class="clock-display hidden"></div>
 
-    <!-- 右上角全屏按钮 -->
+    <!-- Fullscreen button -->
     <button id="fullscreen" class="fullscreen">
       <img src="assets/icon/full_screen.png" alt="fullscreen-btn" width="25"/>
     </button>
 
-    <!-- 主题选择面板：点击左下角圆形按钮出现 -->
+    <!-- Theme Selection Panel: appears when clicking the circular button in the bottom-left corner -->
     <section id="theme-panel" class="theme-panel hidden">
       <button id="theme-prev-btn" class="theme-arrow">
         <img src="assets/icon/back.png" alt="back-btn" width="25"/>
@@ -50,7 +52,7 @@ Some layout and interaction problems were solved with the help of ChatGPT and Ge
 
       <!-- I wanted to create four themed cards with a visual effect similar to a carousel. So I asked ChatGPT how to do it. -->
       <div class="theme-card-list" id="theme-card-list">
-        <!-- JS 会自动生成四个主题卡片 -->
+        <!--use JS to generate four theme cards -->
       </div>
 
       <button id="theme-next-btn" class="theme-arrow">
@@ -58,22 +60,22 @@ Some layout and interaction problems were solved with the help of ChatGPT and Ge
       </button>
     </section>
 
-    <!-- 底部控制栏 -->
+    <!-- Bottom Control Bar -->
     <section class="controlBar">
 
-      <!-- 左侧：主题按钮 + 当前音乐信息 -->
+      <!-- Theme button + current track information -->
       <div class="track-area">
         <button id="theme-btn" class="theme-btn" aria-label="Choose theme">
-          <img id="theme-icon" src="assets/theme/focus/icon.png" alt="music-btn" width="25"/>
+          <img id="theme-icon" src="assets/theme/chill/icon.png" alt="music-btn" width="25"/>
         </button>
 
         <div class="track-text">
-          <h2 id="track-title">Violet City</h2>
-          <p id="track-artist">Focus Night</p>
+          <h2 id="track-title">Fireside Chat</h2>
+          <p id="track-artist">Yunior Arronte</p>
         </div>
       </div>
 
-      <!-- 中间：上一主题 / 播放暂停 / 下一主题 -->
+      <!-- Previous theme / Play/Pause / Next theme -->
       <div class="main-controls">
         <button id="prev-btn" class="icon-btn">
           <img src="assets/icon/rewind.png" alt="rewind-btn" width="25"/>
@@ -88,7 +90,7 @@ Some layout and interaction problems were solved with the help of ChatGPT and Ge
         </button>
       </div>
 
-      <!-- 右侧：随机 / 音量 / 设置 -->
+      <!-- Right side: shuffle / volume / settings -->
       <div class="right-controls">
         <button id="shuffle-btn" class="icon-btn">
           <img src="assets/icon/shuffle.png" alt="shuffle-btn" width="25"/>
@@ -103,14 +105,14 @@ Some layout and interaction problems were solved with the help of ChatGPT and Ge
         </button>
       </div>
 
-      <!-- 音量滑杆 -->
+      <!-- Volume slider -->
       <div id="volume-panel" class="volume-panel hidden">
         <!-- I asked Gemini for help with the volume slider, and it taught me to use a range input and give me a sample structure -->
         <input id="volume-slider" type="range" min="0" max="1" step="0.01" value="0.7" />
       </div>
     </section>
 
-    <!-- 设置面板 -->
+    <!-- Settings Panel -->
     <section id="settings-panel" class="settings-panel hidden">
       <div class="settings-header">
         <h3>Settings</h3>
@@ -160,7 +162,7 @@ Some layout and interaction problems were solved with the help of ChatGPT and Ge
       </div>
     </section>
 
-    <!-- 真正播放音乐的 audio -->
+    <!-- audio -->
     <audio id="audio-player"></audio>
 
   </main>

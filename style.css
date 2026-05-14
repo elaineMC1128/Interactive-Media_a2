@@ -1,8 +1,6 @@
 /* 
 I used :root variables to store the main colors and reusable design values for the website, such as background colors and text colors.
-
 This approach makes the stylesheet easier to maintain because changing a value in one place automatically updates it across the whole interface. It also helps keep the visual style consistent between different components such as the control bar, settings panel, and theme cards.
-
 I first learned about CSS custom properties in another web design course and then used MDN documentation as additional support.
 */
 :root {
@@ -84,7 +82,7 @@ body {
 
 
 /* =========================
-   主题选择面板 Theme Selection Panel
+   Theme Selection Panel
    ========================= */
 
 .theme-panel {
@@ -208,7 +206,7 @@ body {
 }
 
 /* =========================
-   底部控制栏 Bottom Control Bar
+   Bottom Control Bar
    ========================= */
 
 .controlBar {
@@ -452,7 +450,7 @@ I asked ChatGPT to help me create a custom toggle switch using HTML and CSS, and
   transform: translateX(34px); /* 70 - 32 - 2*2 = 34 */
 }
 
-/* 自动隐藏 UI */
+/* auto hide UI */
 body.hide-ui .controlBar,
 body.hide-ui .site-title,
 body.hide-ui .fullscreen,
@@ -461,12 +459,12 @@ body.hide-ui .theme-panel {
   pointer-events: none;
 }
 
-/* 通用隐藏 */
+/* universal hidden */
 .hidden {
   display: none;
 }
 
-/* 响应式 */
+/* Responsive */
 @media (max-width: 900px) {
   .controlBar {
     left: 16px;
