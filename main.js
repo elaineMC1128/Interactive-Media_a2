@@ -49,36 +49,51 @@ const fullscreenBtn = document.querySelector("#fullscreen");
 const themes = [
   {
     id: "chill",
-    title: "Chill",
+
+   /*  
+   Attribution text：
+
+    Music by: bensound.com
+    License code: ZP0JAXO72NCL5QRY
+    Artist: : Yunior Arronte 
+    */
+    title: "Fireside Chat",
     subtitle: "Soft Break",
-    artist: "lofi.study",
+    artist: "Yunior Arronte",
     bg: "assets/theme/chill/bg.gif",
     music: "assets/theme/chill/audio.mp3",
     icon: "assets/theme/chill/icon.png",
   },
   {
     id: "focus",
-    title: "Focus",
+    // music download from media source of assignment2
+    title: "Ambient Wave",
     subtitle: "Focus Study",
-    artist: "lofi.study",
+    artist: "Erokia",
     bg: "assets/theme/focus/bg.gif",
     music: "assets/theme/focus/audio.mp3",
     icon: "assets/theme/focus/icon.png",
   },
   {
     id: "relax",
-    title: "Relax",
+    /* 
+    Music I use: Bensound.com
+    License code: UL79S3V8MWPAQAIP
+    Artist: : Aventure 
+    */
+    title: "Longnight",
     subtitle: "Relaxing Mood",
-    artist: "lofi.study",
+    artist: "Aventure",
     bg: "assets/theme/relax/bg.gif",
     music: "assets/theme/relax/audio.mp3",
     icon: "assets/theme/relax/icon.png",
   },
   {
     id: "jazzy",
-    title: "Jazzy",
+    // Sound Effect by <a href="https://pixabay.com/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=6402">freesound_community</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=6402">Pixabay</a>
+    title: "Pixabay",
     subtitle: "Chill Night",
-    artist: "lofi.study",
+    artist: "freesound_community",
     bg: "assets/theme/jazzy/bg.gif",
     music: "assets/theme/jazzy/audio.mp3",
     icon: "assets/theme/jazzy/icon.png",
@@ -87,7 +102,7 @@ const themes = [
 
 
 /* =========================
-   3. 播放状态
+   播放状态 Playing state
    ========================= */
 
 let currentThemeIndex = 0;
@@ -97,7 +112,7 @@ audio.volume = 0.7;
 
 
 /* =========================
-   4. 初始化页面
+   初始化页面 Initialization page
    ========================= */
 
 renderThemeCards();
@@ -149,7 +164,7 @@ function loadTheme(index) {
   audio.src = theme.music;
 
   trackTitle.textContent = theme.title;
-  trackArtist.textContent = theme.subtitle;
+  trackArtist.textContent = theme.artist;
 
   themeIcon.src = theme.icon;
   themeIcon.alt = `${theme.title} icon`;
